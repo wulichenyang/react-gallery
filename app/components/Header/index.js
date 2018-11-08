@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router'
 import { Button } from '@components/Buttons'
 
-import '@styles/header.less'
+import './index.less'
 
 class Header extends Component {
   render() {
@@ -16,10 +16,10 @@ class Header extends Component {
           </div>
           <ul role="nav" className="nav">
             <li>
-              <Link to="/home" activeClassName="active">home</Link>
+              <Link to="/home" activeClassName="active">Home</Link>
             </li>
             <li>
-              <Link to="/page1" activeClassName="active">page1</Link>
+              <Link to="/dustbin" activeClassName="active">Dustbin</Link>
             </li>
             <li>
               <Link to="page2" activeClassName="active">page2</Link>

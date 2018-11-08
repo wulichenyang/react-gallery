@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router'
-import '@styles/buttons.less'
+import './index.less'
 
 export const Button = ({
   className = '',

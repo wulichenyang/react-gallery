@@ -2,15 +2,17 @@ import React, { Component, Fragment } from 'react'
 import ContentBanner from '@components/ContentBanner'
 import MainWrapper from '@components/MainWrapper'
 
-class Home extends Component {
+import './index.less'
+
+class Dustbin extends Component {
 	render() {
 		return (
 			<Fragment>
-				<ContentBanner title="Welcome"></ContentBanner>
+				<ContentBanner title="Collection & Dustbin"></ContentBanner>
 				<MainWrapper></MainWrapper>
 			</Fragment>
 		)
 	}
 }
 
-export default Home;
+export default Dustbin;
