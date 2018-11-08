@@ -1,0 +1,32 @@
+@import './theme.less';
+
+/* my button */
+button.btn:focus{outline:0;}
+button.btn {
+  border: none;
+  display: inline-block;
+  padding: 8px 30px;
+  background-color:@button-pink;
+  border-radius: 5px;
+  color: @white;
+  &:hover {
+    background-color: @button-dark-pink;
+    cursor: pointer;
+  }
+  span {
+    font-size: 15px;
+  }
+}
+button.sm-btn {
+  padding: 4px 12px;
+  span {
+    font-size: 12px;
+  }
+}
+button.md-btn {
+
+}
+button.lg-btn {
+  padding: 12px 48px;
+  font-size: 18px;
+}

@@ -1,0 +1,17 @@
+/* css reset code of Tencent */
+body,ol,ul,h1,h2,h3,h4,h5,h6,p,th,td,dl,dd,form,fieldset,legend,input,textarea,select{margin:0;padding:0;font-weight:400}   
+body{font:12px"Arial","Microsoft YaHei","黑体","宋体",sans-serif;background:#fff;-webkit-text-size-adjust:100%;}   
+a{color:#2d374b;text-decoration:none}   
+a:hover{color:#001ba0;text-decoration:none}   
+em{font-style:normal}   
+li{list-style:none}   
+img{border:0;vertical-align:middle}   
+table{border-collapse:collapse;border-spacing:0}   
+p{word-wrap:break-word}
+
+/* my selection */
+::selection {
+    color: #fff;
+    color: rgba(255,255,255,0.85);
+    background: #ea4c89;
+}

@@ -1,0 +1,21 @@
+@import './theme.less';
+
+#content {
+  position: relative;
+  .content-banner {
+    h2 {
+      text-align: center;
+      color: @content-title;
+      background-color: @content-title-bg; 
+      line-height: 50px;
+      letter-spacing: 2px;
+    }
+    border-bottom: 1px solid @content-title-border;
+  }
+
+  .main-wrapper {
+    min-height: 200px;
+    padding: 30px 30px 40px 30px;
+    background-color: @content-bg;
+  }
+}
