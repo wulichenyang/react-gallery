@@ -1,1 +1,35 @@
 @import '~@styles/theme.less';
+
+.collection-wrapper {
+  padding: 0 200px;
+  .select-wrapper {
+    padding: 20px;
+    border: 1px solid @content-title-border;
+    h3 {
+      color: @content-title;
+      text-align: center;
+      line-height: 50px;
+      font-size: 18px;
+    }
+    ul.drag-list {
+      display: flex;
+      li.drag-item {
+        width: 64px;
+        height: 64px;
+        display: flex;
+        margin: 0 10px;
+        justify-content: center;
+        align-items: center;
+        border: 1px solid @content-title-border;
+        border-radius: 5px;
+        cursor: default;
+        transition: ease .2s;
+        &:hover {
+          color: @button-pink;
+          border-color: @button-pink;
+          transition: ease .2s;
+        }
+      }
+    }
+  }
+}
