@@ -2,22 +2,48 @@
 
 .collection-wrapper {
   padding: 0 200px;
-  .select-wrapper {
-    padding: 20px;
-    border: 1px solid @content-title-border;
-    h3 {
-      color: @content-title;
-      text-align: center;
-      line-height: 50px;
-      font-size: 18px;
+  .collection-inner {
+    background-color: @white;
+    .select-wrapper {
+      padding: 0 20px 20px;
+      border: 1px solid @content-title-border;
+      border-bottom: none;
+      h3 {
+        color: @content-title;
+        text-align: center;
+        line-height: 50px;
+        font-size: 18px;
+        margin-bottom: 30px;
+      }
     }
-    ul.drag-list {
+    .collection-dustbin {
       display: flex;
+      .collection {
+        border-right: none !important;
+      }
+      .dusbin {
+
+      }
+      .collection, .dustbin {
+        flex: 1;
+        min-height: 300px;
+        border: 1px solid @content-title-border;
+      }
+      h3 {
+        color: @content-title;
+        text-align: center;
+        line-height: 50px;
+        font-size: 18px;
+      }
+    }
+    ul.drag-list, ul.collection-list {
+      display: flex;
+      flex-wrap: wrap;
       li.drag-item {
         width: 64px;
         height: 64px;
         display: flex;
-        margin: 0 10px;
+        margin: 0 10px 10px;
         justify-content: center;
         align-items: center;
         border: 1px solid @content-title-border;
