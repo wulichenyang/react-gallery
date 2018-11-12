@@ -1,7 +1,16 @@
 @import '~@styles/theme.less';
 
+
+
 .main-wrapper {
   min-height: 200px;
   padding: 30px 30px 40px 30px;
   background-color: @content-bg;
+}
+
+/* Small devices (portrait tablets and large phones,767px and down) */
+@media only screen and (max-width: 767px) {
+  .main-wrapper {
+    padding :30px 10px 40px 10px;
+  }
 }

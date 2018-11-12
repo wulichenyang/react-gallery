@@ -8,7 +8,6 @@
   .nav-wrapper {
     display: flex;
     width: 100%;
-    height: 56px;
     justify-content: flex-start;
     background-color: @banner-gray;
     #logo {
@@ -32,8 +31,10 @@
       display: flex;
       width: 100%;
       flex-direction: row;
+      flex-wrap: wrap;
       &>li {
         display: flex;
+        height: 56px;
         align-items: center;
         padding: 0 10px;
         list-style-type: none;
