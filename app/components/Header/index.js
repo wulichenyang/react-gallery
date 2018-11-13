@@ -22,7 +22,7 @@ class Header extends Component {
               <Link to="/dustbin" activeClassName="active">Dustbin</Link>
             </li>
             <li>
-              <Link to="page2" activeClassName="active">page2</Link>
+              <Link to="/finacial" activeClassName="active">Finacial</Link>
             </li>
             <li>
               <Link to="page3" activeClassName="active">page3</Link>
