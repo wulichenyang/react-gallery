@@ -1,6 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import FinacialRecord from '@components/FinacialRecord'
+import WrappedAddForm from './WrappedAddForm'
 import { MainWrapper } from '@components/MainWrapper';
+
 // Using ant design
 import { Table, Input, InputNumber, Popconfirm, Form, Button as Btn, Modal, 
          Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, AutoComplete } from 'antd';
@@ -240,31 +242,8 @@ class FinacialTable extends React.Component {
   cancel = () => {
     this.setState({ editingKey: '' });
   };
-  // Add from
-  handleSubmit = (e) => {
-    e.preventDefault();
-    this.props.form.validateFieldsAndScroll((err, values) => {
-      if (!err) {
-        console.log('Received values of form: ', values);
-      }
-    });
-  }
 
-  render() {
-    // Add form
-    const { getFieldDecorator } = this.props.form;
-
-    const formItemLayout = {
-      labelCol: {
-        xs: { span: 24 },
-        sm: { span: 8 },
-      },
-      wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 16 },
-      },
-    };
-    
+  render() {    
     // Table
     const addVisible = this.state.addVisible;
     const removeVisible = this.state.removeVisible;
@@ -315,52 +294,7 @@ class FinacialTable extends React.Component {
           onOk={() => this.handleAddOk()}
           onCancel={() => this.handleAddCancel()}
         >
-          <Form onSubmit={this.handleSubmit}>
-            <FormItem
-              {...formItemLayout}
-              label="activity"
-            >
-              {getFieldDecorator('activity', {
-                rules: [{
-                  type: 'activity', message: 'The input is not valid E-mail!',
-                }, {
-                  required: true, message: 'Please input your activity!',
-                }],
-              })(
-                <Input />
-              )}
-            </FormItem>
-            <FormItem
-              {...formItemLayout}
-              label="money"
-            >
-              {getFieldDecorator('money', {
-                rules: [{
-                  type: 'money', message: 'The input is not valid E-mail!',
-                }, {
-                  required: true, message: 'Please input your money!',
-                }],
-              })(
-                <Input />
-              )}
-            </FormItem>
-            <FormItem
-              {...formItemLayout}
-              label="Date"
-            >
-              {getFieldDecorator('date-picker', config)(
-                <DatePicker />
-              )}
-            </FormItem>
-            <FormItem
-              {...formItemLayout}
-              label="DatePicker[showTime]"
-            >
-              {getFieldDecorator('date-time-picker', config)(
-                <DatePicker showTime format="YYYY-MM-DD HH:mm:ss" />
-              )}
-            </FormItem>
-          </Form>
+          <WrappedAddForm></WrappedAddForm>
         </Modal>
 
         {/* Delete modal  */}
