@@ -124,7 +124,7 @@ class FinacialTable extends React.Component {
                     {form => (
                       <Btn
                         type="primary"
-                        onClick={() => this.save(form, record.key)}
+                        onClick={(e) => this.save(form, record.key)}
                         style={{ marginRight: 8 }}
                       >
                         Save
@@ -204,26 +204,26 @@ class FinacialTable extends React.Component {
   }
 
   save(form, key) {
-    form.validateFields((error, row) => {
-      if (error) {
-        return;
-      }
-      const newData = [...this.state.data];
-      const index = newData.findIndex(item => key === item.key);
-      if (index > -1) {
-        const item = newData[index];
-        newData.splice(index, 1, {
-          ...item,
-          ...row,
-          // Rewrite date into YYYY-MM-DD
-          date: row.date.format('YYYY-MM-DD')
-        });
-        this.setState({ data: newData, editingKey: '' });
-      } else {
-        newData.push(row);
-        this.setState({ data: newData, editingKey: '' });
-      }
-    });
+      form.validateFields((error, row) => {
+        if (error) {
+          return;
+        }
+        const newData = [...this.state.data];
+        const index = newData.findIndex(item => key === item.key);
+        if (index > -1) {
+          const item = newData[index];
+          newData.splice(index, 1, {
+            ...item,
+            ...row,
+            // Rewrite date into YYYY-MM-DD
+            date: row.date.format('YYYY-MM-DD')
+          });
+          this.setState({ data: newData, editingKey: '' });
+        } else {
+          newData.push(row);
+          this.setState({ data: newData, editingKey: '' });
+        }
+      });
   }
 
   cancel = () => {
