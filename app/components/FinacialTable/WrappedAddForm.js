@@ -2,24 +2,22 @@
 import React, {Component} from 'react'
 
 import { Form, DatePicker, TimePicker, Button, Input, InputNumber } from 'antd';
+import { AddTodo } from '@containers/Todo/AddTodo';
 
 class AddForm extends Component {
   constructor(props) {
     super(props)
   }
-  // Add from
-  handleSubmit = (e) => {
-    e.preventDefault();
-    this.props.form.validateFieldsAndScroll((err, values) => {
-      if (!err) {
-        console.log('Received values of form: ', values);
-      }
-    });
+
+  componentDidMount() {
+    // Bind 'this' to parent's 'this.child'
+    this.props.onRef(this)
   }
 
   render() {
     const FormItem = Form.Item
     const { getFieldDecorator } = this.props.form
+    const { submitLoading, handleSubmit} = this.props
 
     const formItemLayout = {
       labelCol: {
@@ -29,6 +27,18 @@ class AddForm extends Component {
       wrapperCol: {
         xs: { span: 24 },
         sm: { span: 16 },
+      },
+    }
+    const tailFormItemLayout = {
+      wrapperCol: {
+        xs: {
+          span: 24,
+          offset: 0,
+        },
+        sm: {
+          span: 16,
+          offset: 8,
+        },
       },
     }
     // Date-picker rules
@@ -51,10 +61,10 @@ class AddForm extends Component {
     }
 
     return (
-      <Form onSubmit={this.handleSubmit}>
+      <Form onSubmit={handleSubmit}>
         <FormItem
           {...formItemLayout}
-          label="activity"
+          label="Activity"
         >
           {getFieldDecorator('activity', config.activity)(
             <Input />
@@ -62,7 +72,7 @@ class AddForm extends Component {
         </FormItem>
         <FormItem
           {...formItemLayout}
-          label="money"
+          label="Money"
         >
           {getFieldDecorator('money', config.money)(
             <InputNumber />
@@ -72,9 +82,27 @@ class AddForm extends Component {
           {...formItemLayout}
           label="Date"
         >
-          {getFieldDecorator('date-picker', config.date)(
+          {getFieldDecorator('date', config.date)(
             <DatePicker />
           )}
+        </FormItem>
+        <FormItem 
+          {...tailFormItemLayout}
+          style={{textAlign: 'right'}}
+        >
+          <Button
+            type="default"
+            onClick={this.props.onCancel}
+          >
+            Cancel
+          </Button>
+          <Button
+            type="primary"
+            htmlType="submit"
+            loading={submitLoading}
+          >
+            Submit
+          </Button>
         </FormItem>
       </Form>
     )

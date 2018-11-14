@@ -5,7 +5,8 @@ import { MainWrapper } from '@components/MainWrapper';
 
 // Using ant design
 import { Table, Input, InputNumber, Popconfirm, Form, Button as Btn, Modal, 
-         Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, AutoComplete } from 'antd';
+         Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, DatePicker, AutoComplete } from 'antd';
+import moment from 'moment'
 import './index.less'
 import { Button } from '@components/Buttons';
 
@@ -34,8 +35,11 @@ class EditableCell extends React.Component {
   getInput = () => {
     if (this.props.inputType === 'number') {
       return <InputNumber />;
+    } else if(this.props.inputType === 'date-picker') {
+      return <DatePicker />;
+    } else {
+      return <Input />;
     }
-    return <Input />;
   };
 
   render() {
@@ -56,12 +60,15 @@ class EditableCell extends React.Component {
             <td {...restProps}>
               {editing ? (
                 <FormItem style={{ margin: 0 }}>
-                  {getFieldDecorator(dataIndex, {
+                  {
+                    getFieldDecorator(dataIndex, {
                     rules: [{
                       required: true,
                       message: `Please Input ${title}!`,
                     }],
-                    initialValue: record[dataIndex],
+                    initialValue: dataIndex === 'date' ? 
+                      moment(record[dataIndex], 'YYYY-MM-DD') 
+                      : record[dataIndex],
                   })(this.getInput())}
                 </FormItem>
               ) : restProps.children}
@@ -81,6 +88,7 @@ class FinacialTable extends React.Component {
       editingKey: '', 
       removingKey: '',
       addVisible: false,
+      submitLoading: false,
     };
     this.columns = [
       {
@@ -132,13 +140,13 @@ class FinacialTable extends React.Component {
                 </span>
               ) : (
                 <Fragment>
+                  <Btn onClick={() => this.edit(record.key)}>Edit</Btn>
                   <Btn 
                     onClick={() => this.showRemoveModal(record.key)}
                     type="danger"
                   >
                     Delete
                   </Btn>
-                  <Btn onClick={() => this.edit(record.key)}>Edit</Btn>
                 </Fragment>
               )}
             </div>
@@ -178,25 +186,6 @@ class FinacialTable extends React.Component {
     
   }
 
-  // Add modal
-  showAddModal = () => {
-    this.setState({
-      addVisible: true,
-    });
-  }
-
-  handleAddOk = () => {
-    this.setState(prevState => ({
-      addVisible: false,
-    }));
-  }
-
-  handleAddCancel = () => {
-    this.setState({
-      addVisible: false,
-    });
-  }
-
   // bool
   isEditing = (record) => {
     return record.key === this.state.editingKey;
@@ -204,10 +193,6 @@ class FinacialTable extends React.Component {
 
   isRemoving = (record) => {
     return record.key === this.state.removingKey;
-  }
-
-  add() {
-
   }
 
   remove(key) {
@@ -230,6 +215,8 @@ class FinacialTable extends React.Component {
         newData.splice(index, 1, {
           ...item,
           ...row,
+          // Rewrite date into YYYY-MM-DD
+          date: row.date.format('YYYY-MM-DD')
         });
         this.setState({ data: newData, editingKey: '' });
       } else {
@@ -241,11 +228,75 @@ class FinacialTable extends React.Component {
 
   cancel = () => {
     this.setState({ editingKey: '' });
-  };
+  }
 
+  // Add modal
+  showAddModal = () => {
+    this.setState({
+      addVisible: true,
+    });
+  }
+
+  handleAddCancel = () => {
+    this.setState({
+      addVisible: false,
+    });
+  }
+
+  cancelAdd = () => {
+    this.setState({
+      addVisible: false
+    })
+  }
+
+  // Bind addForm's 'this' to 'this.child'
+  onAddFormRef = ref => {
+    this.addForm = ref
+  }
+
+  handleResetAdd = () => {
+    this.addForm.props.form.resetFields();
+  }
+
+  handleAddForm = (e) => {
+    this.setState({
+      submitLoading: true
+    })
+    e.preventDefault();
+      this.addForm.props.form.validateFieldsAndScroll((err, values) => {
+        if (!err) {
+          setTimeout(() => {
+            console.log('Received values of form: ', values);
+            this.setState(prevState => {
+              const key = 1 + parseInt(prevState.data[prevState.data.length - 1].key)
+              const newItem = {
+                key,
+                ...values,
+                date: values.date.format('YYYY-MM-DD')
+              }
+              const newData = prevState.data
+              newData.push(newItem)
+              return newData
+            })
+            this.handleResetAdd()
+            this.setState({
+              submitLoading: false,
+              addVisible: false,
+            })
+          }, 1000);
+        } else {
+          this.setState({
+            submitLoading: false,
+          })
+        }
+      });
+  }
+  
   render() {    
+    // Add form
+    const { addVisible, submitLoading } = this.state
+
     // Table
-    const addVisible = this.state.addVisible;
     const removeVisible = this.state.removeVisible;
     const components = {
       body: {
@@ -262,7 +313,8 @@ class FinacialTable extends React.Component {
         ...col,
         onCell: record => ({
           record,
-          inputType: col.dataIndex === 'money' ? 'number' : 'text',
+          inputType: col.dataIndex === 'money' ? 'number'
+            : col.dataIndex === 'date' ? 'date-picker' : 'text',
           dataIndex: col.dataIndex,
           title: col.title,
           editing: this.isEditing(record),
@@ -291,10 +343,15 @@ class FinacialTable extends React.Component {
         <Modal
           title="Add"
           visible={addVisible}
-          onOk={() => this.handleAddOk()}
           onCancel={() => this.handleAddCancel()}
+          footer={null}
         >
-          <WrappedAddForm></WrappedAddForm>
+          <WrappedAddForm 
+            handleSubmit={(e) => this.handleAddForm(e)}
+            onCancel={()=>{this.cancelAdd()}}
+            submitLoading={submitLoading}
+            onRef={(ref) => this.onAddFormRef(ref)}
+          ></WrappedAddForm>
         </Modal>
 
         {/* Delete modal  */}
