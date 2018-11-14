@@ -13,7 +13,7 @@ import { Button } from '@components/Buttons';
 const data = [];
 for (let i = 0; i < 10; i++) {
   data.push({
-    key: i.toString(),
+    key: i,
     activity: `Shopping ${i}`,
     money: 2000,
     date: new Date().toISOString().slice(0, 10),
@@ -85,8 +85,8 @@ class FinacialTable extends React.Component {
     super(props);
     this.state = { 
       data, 
-      editingKey: '', 
-      removingKey: '',
+      editingKey: null, 
+      removingKey: null,
       addVisible: false,
       submitLoading: false,
     };
@@ -171,7 +171,7 @@ class FinacialTable extends React.Component {
         data: prevState.data.filter(record => {
           return record.key !== removingKey
         }),
-        removingKey: '',
+        removingKey: null,
         removeVisible: false,
       }
     })
@@ -180,7 +180,7 @@ class FinacialTable extends React.Component {
   handleRemoveCancel = () => {
     console.log();
     this.setState({
-      removingKey: '',
+      removingKey: null,
       removeVisible: false,
     });
     
@@ -218,16 +218,16 @@ class FinacialTable extends React.Component {
             // Rewrite date into YYYY-MM-DD
             date: row.date.format('YYYY-MM-DD')
           });
-          this.setState({ data: newData, editingKey: '' });
+          this.setState({ data: newData, editingKey: null });
         } else {
           newData.push(row);
-          this.setState({ data: newData, editingKey: '' });
+          this.setState({ data: newData, editingKey: null });
         }
       });
   }
 
   cancel = () => {
-    this.setState({ editingKey: '' });
+    this.setState({ editingKey: null });
   }
 
   // Add modal
@@ -268,7 +268,7 @@ class FinacialTable extends React.Component {
           setTimeout(() => {
             console.log('Received values of form: ', values);
             this.setState(prevState => {
-              const key = 1 + parseInt(prevState.data[prevState.data.length - 1].key)
+              const key = 1 + prevState.data[prevState.data.length - 1].key
               const newItem = {
                 key,
                 ...values,

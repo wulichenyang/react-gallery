@@ -38,6 +38,8 @@ const webpackConfigBase = {
       // '@middleware': path.join(__dirname, '../app/middleware'),
       '@pages': path.join(__dirname, '../app/pages'),
       '@styles': path.join(__dirname, '../app/styles'),
+      '@model': path.join(__dirname, '../server/models'),
+      '@routes': path.join(__dirname, '../server/routes')
       // '@tableList': path.join(__dirname, '../app/components/tableList/tableList.js'),
     },
   },
