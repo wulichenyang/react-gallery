@@ -1,11 +1,4 @@
 let mongoose = require('mongoose');
-let Schema = mongoose.Schema;
-
-let finacialSchema = new Schema({
-  "key": Number,
-  "activity": String,
-  "money": Number,
-  "date": Date
-});
+let finacialSchema = require('../schema/finacial');
 
 module.exports = mongoose.model('Finacial', finacialSchema);

@@ -20,6 +20,8 @@ npm run mock (运行 mockjs http://highsea90.com/t/mock/)
 
 npm run build (打包，部署)
 
+npm run mongo (运行连接本地 mongodb :27017)
+
 ```
 
 服务端返回的格式定义这样一个数据结构
@@ -34,7 +36,7 @@ npm run build (打包，部署)
     ],
   },
   msg: '',
-  status: 1,
+  status: 0/1 (0 -> success / 1 -> error)
 }
 
 ```
