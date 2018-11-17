@@ -140,7 +140,13 @@ export default async (url, method = GET) => {
       return res;
     } catch (error) {
       throw new Error('Api request error: ' + error)
-      return error
+      return new Promise((r, f) => {
+        return f({
+          data: {},
+          msg: 'Api request error',
+          status: 1
+        })
+      })
     }
   }
 }
