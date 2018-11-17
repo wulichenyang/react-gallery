@@ -1,7 +1,6 @@
 let express = require('express');
 let finacialRouter = express.Router();
 let Finacial = require('../models/finacial');
-let { apiPrefix } = require('../config')
 
 //  // insert
 //   let finacial = new Finacial({
@@ -18,7 +17,7 @@ let { apiPrefix } = require('../config')
 //   })
 
 //查询金融表单数据
-finacialRouter.get(`${apiPrefix}/finacial`, (req, res, next) => {
+finacialRouter.get('/finacial', (req, res, next) => {
   let query = Finacial.find({})
   query.exec((err, doc) => {
     if (err) {

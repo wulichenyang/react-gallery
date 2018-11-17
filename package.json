@@ -9,7 +9,7 @@
     "build": "webpack --config ./scripts/webpack.prod.config.js",
     "lint": "eslint ./ --cache --fix --ignore-pattern .gitignore",
     "mock": "supervisor -w mock ./app/mocks/http.js",
-    "mongo": "nodemon server/bin/www"
+    "server": "nodemon server/bin/www"
   },
   "author": "lichenyang",
   "license": "ISC",

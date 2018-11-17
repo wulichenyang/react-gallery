@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { Router, Route, Redirect, IndexRoute, hashHistory } from 'react-router'
 
 import Index from '@components/Index'
-import NotFound from '@pages/NotFound'
 import Page3 from '@components/Page3'
 import Home from '@pages/Home'
+import NotFound from '@pages/NotFound'
 import Dustbin from '@pages/Dustbin'
 import Finacial from '@pages/Finacial'
 

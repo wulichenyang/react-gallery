@@ -3,10 +3,12 @@ var path = require('path');
 var bodyParser = require('body-parser')
 var cookieParser = require('cookie-parser');
 var routers = require('./routes/index');
+var router = express.Router();
 // var finacial = require('./routes/finacial');
 var logger = require('morgan');
 var app = express()
 var mongoose = require('mongoose');
+const { apiPrefix } = require('./config')
 
 //链接MongoDB数据库
 const user = 'test'
@@ -52,6 +54,10 @@ app.use(cookieParser());
 // routers
 app.use(routers.indexRouter);
 app.use(routers.finacialRouter);
+// Add api prefix
+Object.keys(routers).map(key => {
+  app.use(apiPrefix, routers[key])
+})
 
 // wrong route => catch 404 and forward to error handler
 app.use(function (req, res, next) {

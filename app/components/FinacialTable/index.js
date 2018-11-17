@@ -2,13 +2,16 @@ import React, { Component, Fragment } from 'react';
 import FinacialRecord from '@components/FinacialRecord'
 import WrappedAddForm from './WrappedAddForm'
 import { MainWrapper } from '@components/MainWrapper';
+import moment from 'moment'
 
 // Using ant design
-import { Table, Input, InputNumber, Popconfirm, Form, Button as Btn, Modal, 
-         Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, DatePicker, AutoComplete } from 'antd';
-import moment from 'moment'
-import './index.less'
+import {
+  Table, Input, InputNumber, Popconfirm, Form, Button as Btn, Modal,
+  Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, DatePicker, AutoComplete
+} from 'antd';
 import { Button } from '@components/Buttons';
+import { finacialApi } from '@api'
+import './index.less'
 
 const data = [];
 for (let i = 0; i < 10; i++) {
@@ -35,7 +38,7 @@ class EditableCell extends React.Component {
   getInput = () => {
     if (this.props.inputType === 'number') {
       return <InputNumber />;
-    } else if(this.props.inputType === 'date-picker') {
+    } else if (this.props.inputType === 'date-picker') {
       return <DatePicker />;
     } else {
       return <Input />;
@@ -62,14 +65,14 @@ class EditableCell extends React.Component {
                 <FormItem style={{ margin: 0 }}>
                   {
                     getFieldDecorator(dataIndex, {
-                    rules: [{
-                      required: true,
-                      message: `Please Input ${title}!`,
-                    }],
-                    initialValue: dataIndex === 'date' ? 
-                      moment(record[dataIndex], 'YYYY-MM-DD') 
-                      : record[dataIndex],
-                  })(this.getInput())}
+                      rules: [{
+                        required: true,
+                        message: `Please Input ${title}!`,
+                      }],
+                      initialValue: dataIndex === 'date' ?
+                        moment(record[dataIndex], 'YYYY-MM-DD')
+                        : record[dataIndex],
+                    })(this.getInput())}
                 </FormItem>
               ) : restProps.children}
             </td>
@@ -83,9 +86,9 @@ class EditableCell extends React.Component {
 class FinacialTable extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { 
-      data, 
-      editingKey: null, 
+    this.state = {
+      data,
+      editingKey: null,
       removingKey: null,
       addVisible: false,
       submitLoading: false,
@@ -139,16 +142,16 @@ class FinacialTable extends React.Component {
                   </Popconfirm>
                 </span>
               ) : (
-                <Fragment>
-                  <Btn onClick={() => this.edit(record.key)}>Edit</Btn>
-                  <Btn 
-                    onClick={() => this.showRemoveModal(record.key)}
-                    type="danger"
-                  >
-                    Delete
+                  <Fragment>
+                    <Btn onClick={() => this.edit(record.key)}>Edit</Btn>
+                    <Btn
+                      onClick={() => this.showRemoveModal(record.key)}
+                      type="danger"
+                    >
+                      Delete
                   </Btn>
-                </Fragment>
-              )}
+                  </Fragment>
+                )}
             </div>
           );
         },
@@ -183,7 +186,7 @@ class FinacialTable extends React.Component {
       removingKey: null,
       removeVisible: false,
     });
-    
+
   }
 
   // bool
@@ -204,26 +207,26 @@ class FinacialTable extends React.Component {
   }
 
   save(form, key) {
-      form.validateFields((error, row) => {
-        if (error) {
-          return;
-        }
-        const newData = [...this.state.data];
-        const index = newData.findIndex(item => key === item.key);
-        if (index > -1) {
-          const item = newData[index];
-          newData.splice(index, 1, {
-            ...item,
-            ...row,
-            // Rewrite date into YYYY-MM-DD
-            date: row.date.format('YYYY-MM-DD')
-          });
-          this.setState({ data: newData, editingKey: null });
-        } else {
-          newData.push(row);
-          this.setState({ data: newData, editingKey: null });
-        }
-      });
+    form.validateFields((error, row) => {
+      if (error) {
+        return;
+      }
+      const newData = [...this.state.data];
+      const index = newData.findIndex(item => key === item.key);
+      if (index > -1) {
+        const item = newData[index];
+        newData.splice(index, 1, {
+          ...item,
+          ...row,
+          // Rewrite date into YYYY-MM-DD
+          date: row.date.format('YYYY-MM-DD')
+        });
+        this.setState({ data: newData, editingKey: null });
+      } else {
+        newData.push(row);
+        this.setState({ data: newData, editingKey: null });
+      }
+    });
   }
 
   cancel = () => {
@@ -263,36 +266,36 @@ class FinacialTable extends React.Component {
       submitLoading: true
     })
     e.preventDefault();
-      this.addForm.props.form.validateFieldsAndScroll((err, values) => {
-        if (!err) {
-          setTimeout(() => {
-            console.log('Received values of form: ', values);
-            this.setState(prevState => {
-              const key = 1 + prevState.data[prevState.data.length - 1].key
-              const newItem = {
-                key,
-                ...values,
-                date: values.date.format('YYYY-MM-DD')
-              }
-              const newData = prevState.data
-              newData.push(newItem)
-              return newData
-            })
-            this.handleResetAdd()
-            this.setState({
-              submitLoading: false,
-              addVisible: false,
-            })
-          }, 1000);
-        } else {
+    this.addForm.props.form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        setTimeout(() => {
+          console.log('Received values of form: ', values);
+          this.setState(prevState => {
+            const key = 1 + prevState.data[prevState.data.length - 1].key
+            const newItem = {
+              key,
+              ...values,
+              date: values.date.format('YYYY-MM-DD')
+            }
+            const newData = prevState.data
+            newData.push(newItem)
+            return newData
+          })
+          this.handleResetAdd()
           this.setState({
             submitLoading: false,
+            addVisible: false,
           })
-        }
-      });
+        }, 1000);
+      } else {
+        this.setState({
+          submitLoading: false,
+        })
+      }
+    });
   }
-  
-  render() {    
+
+  render() {
     // Add form
     const { addVisible, submitLoading } = this.state
 
@@ -346,9 +349,9 @@ class FinacialTable extends React.Component {
           onCancel={() => this.handleAddCancel()}
           footer={null}
         >
-          <WrappedAddForm 
+          <WrappedAddForm
             handleSubmit={(e) => this.handleAddForm(e)}
-            onCancel={()=>{this.cancelAdd()}}
+            onCancel={() => { this.cancelAdd() }}
             submitLoading={submitLoading}
             onRef={(ref) => this.onAddFormRef(ref)}
           ></WrappedAddForm>
