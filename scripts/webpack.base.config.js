@@ -27,7 +27,7 @@ const webpackConfigBase = {
       '@app': path.join(__dirname, '../app'),
       '@actions': path.join(__dirname, '../app/redux/actions'),
       '@reducers': path.join(__dirname, '../app/redux/reducers'),
-      '@apis': path.join(__dirname, '../app/api'),
+      '@api': path.join(__dirname, '../app/api'),
       '@components': path.join(__dirname, '../app/components'),
       '@containers': path.join(__dirname, '../app/containers'),
       '@configs': path.join(__dirname, '../app/configs'),

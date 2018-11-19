@@ -159,6 +159,14 @@ class FinacialTable extends React.Component {
     ];
   }
 
+  getFinacialList() {
+    let x = finacialApi.getFinacialList()
+    console.log(x)
+  }
+  componentDidMount() {
+    this.getFinacialList()
+  }
+
   // Remove modal
   showRemoveModal = (key) => {
     this.setState({
