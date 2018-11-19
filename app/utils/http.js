@@ -37,7 +37,7 @@ const errorHandle = (status, other) => {
     case 403:
       message.warning('登录过期，请重新登录');
       localStorage.removeItem('token');
-      store.commit('loginSuccess', null);
+      // store.commit('loginSuccess', null);
       setTimeout(() => {
         toLogin();
       }, 1000);
@@ -87,7 +87,7 @@ instance.interceptors.response.use(
       // eg:请求超时或断网时，更新state的network状态
       // network状态在app.vue中控制着一个全局的断网提示组件的显示隐藏
       // 关于断网组件中的刷新重新获取数据，会在断网组件中说明
-      store.commit('changeNetwork', false);
+      // store.commit('changeNetwork', false);
     }
   });
 
@@ -110,7 +110,7 @@ export const formatParams = paramsObj => {
  * @param {String} url 请求url
  * @param {GET, POST, PUT, UPDATE} 请求方法
  */
-export default async (url, method = GET) => {
+export default (url, method = GET) => {
   // data => GET : query { a: '', b: '', ... }
   //      => POST: body { a: '', b: '', ... }
   // append
@@ -130,6 +130,7 @@ export default async (url, method = GET) => {
       let res;
       if (method === GET) {
         res = await instance.get(`${url}${appendToUrl.join('')}`)
+        console.log(res)
       } else if (method === POST) {
         res = await instance.post(`${url}${appendToUrl.join('')}`, data)
       } else if (method === PUT) {

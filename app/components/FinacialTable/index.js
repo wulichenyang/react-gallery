@@ -159,9 +159,9 @@ class FinacialTable extends React.Component {
     ];
   }
 
-  getFinacialList() {
-    let x = finacialApi.getFinacialList()
-    console.log(x)
+  async getFinacialList() {
+    let b = await finacialApi.getFinacialList()
+    console.log(b)
   }
   componentDidMount() {
     this.getFinacialList()

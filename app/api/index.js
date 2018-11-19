@@ -3,7 +3,7 @@
  */
 
 // finacial模块接口
-import finacialApi from '@api/apis/finacial';
+import * as finacialApi from '@api/apis/finacial';
 // 其他模块的接口……
 
 // 导出接口
