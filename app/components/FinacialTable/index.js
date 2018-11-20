@@ -13,15 +13,15 @@ import { Button } from '@components/Buttons';
 import { finacialApi } from '@api'
 import './index.less'
 
-const data = [];
-for (let i = 0; i < 10; i++) {
-  data.push({
-    key: i,
-    activity: `Shopping ${i}`,
-    money: 2000,
-    date: new Date().toISOString().slice(0, 10),
-  });
-}
+// const data = [];
+// for (let i = 0; i < 10; i++) {
+//   data.push({
+//     key: i,
+//     activity: `Shopping ${i}`,
+//     money: 2000,
+//     date: new Date().toISOString().slice(0, 10),
+//   });
+// }
 
 const FormItem = Form.Item;
 const EditableContext = React.createContext();
@@ -87,7 +87,7 @@ class FinacialTable extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data,
+      data: [],
       editingKey: null,
       removingKey: null,
       addVisible: false,
@@ -160,8 +160,17 @@ class FinacialTable extends React.Component {
   }
 
   async getFinacialList() {
-    let b = await finacialApi.getFinacialList()
-    console.log(b)
+    let res = await finacialApi.getFinacialList()
+    console.log(res.data)
+    
+    this.setState({
+      data: res.data.map(row => ({
+        key: row._id,
+        activity: row.activity,
+        money: row.money,
+        date: row.date.slice(0, 10),
+      }))
+    })
   }
   componentDidMount() {
     this.getFinacialList()

@@ -9,6 +9,7 @@ var logger = require('morgan');
 var app = express()
 var mongoose = require('mongoose');
 const { apiPrefix } = require('./config')
+const cors = require('cors')
 
 //链接MongoDB数据库
 const user = 'test'
@@ -52,6 +53,12 @@ app.use(cookieParser());
 
 
 // routers
+// cross-access
+app.use(cors({
+  origin: 'http://localhost:3838',
+  credentials: true
+}))
+
 app.use(routers.indexRouter);
 app.use(routers.finacialRouter);
 // Add api prefix
