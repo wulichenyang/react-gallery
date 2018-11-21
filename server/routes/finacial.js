@@ -17,7 +17,7 @@ let Finacial = require('../models/finacial');
 //   })
 
 //查询金融表单数据
-finacialRouter.get('/finacial', (req, res, next) => {
+finacialRouter.get('/getAllFinacial', (req, res, next) => {
   let query = Finacial.find({})
   query.exec((err, doc) => {
     if (err) {
@@ -29,6 +29,25 @@ finacialRouter.get('/finacial', (req, res, next) => {
       res.json({
         status: 0,
         msg: "Got finacial list",
+        data: doc
+      })
+    }
+  })
+})
+
+// 添加金融表单数据
+finacialRouter.post('/addFinacial', (req, res, next) => {
+  const arr = [req.body]
+  Finacial.insertMany(arr, (err, doc) => {
+    if (err) {
+      res.json({
+        status: 1,
+        msg: err.message
+      })
+    } else {
+      res.json({
+        status: 0,
+        msg: "Insert success",
         data: doc
       })
     }

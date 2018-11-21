@@ -6,6 +6,7 @@ import moment from 'moment'
 
 // Using ant design
 import {
+  message,
   Table, Input, InputNumber, Popconfirm, Form, Button as Btn, Modal,
   Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, DatePicker, AutoComplete
 } from 'antd';
@@ -161,16 +162,23 @@ class FinacialTable extends React.Component {
 
   async getFinacialList() {
     let res = await finacialApi.getFinacialList()
-    console.log(res.data)
-    
-    this.setState({
-      data: res.data.map(row => ({
-        key: row._id,
-        activity: row.activity,
-        money: row.money,
-        date: row.date.slice(0, 10),
-      }))
-    })
+    console.log(res)
+    if (res.status === 0) {
+      this.setState({
+        data: res.data.map(row => ({
+          key: row._id,
+          activity: row.activity,
+          money: row.money,
+          date: row.date.slice(0, 10),
+        }))
+      })
+    } else {
+      message.error('获取数据失败')
+    }
+  }
+
+  async addFinacialList(finacialRow) {
+    return await finacialApi.addFinacialList(finacialRow)
   }
   componentDidMount() {
     this.getFinacialList()
@@ -270,6 +278,13 @@ class FinacialTable extends React.Component {
   }
 
   // Bind addForm's 'this' to 'this.child'
+  resetForm = () => {
+    this.setState({
+      submitLoading: false,
+      addVisible: false,
+    })
+    this.getFinacialList()
+  }
   onAddFormRef = ref => {
     this.addForm = ref
   }
@@ -278,32 +293,27 @@ class FinacialTable extends React.Component {
     this.addForm.props.form.resetFields();
   }
 
-  handleAddForm = (e) => {
+  handleAddForm = async (e) => {
     this.setState({
       submitLoading: true
     })
     e.preventDefault();
-    this.addForm.props.form.validateFieldsAndScroll((err, values) => {
+    this.addForm.props.form.validateFieldsAndScroll(async (err, values) => {
       if (!err) {
-        setTimeout(() => {
-          console.log('Received values of form: ', values);
-          this.setState(prevState => {
-            const key = 1 + prevState.data[prevState.data.length - 1].key
-            const newItem = {
-              key,
-              ...values,
-              date: values.date.format('YYYY-MM-DD')
-            }
-            const newData = prevState.data
-            newData.push(newItem)
-            return newData
-          })
+        console.log('Received values of form: ', values);
+        const newItem = {
+          ...values,
+          // date: new Date(values.date)
+        }
+        let res = await this.addFinacialList(newItem)
+        if (res.status === 0) {
+          message.success('添加成功')
           this.handleResetAdd()
-          this.setState({
-            submitLoading: false,
-            addVisible: false,
-          })
-        }, 1000);
+          this.resetForm()
+        } else if (res.status === 1) {
+          message.error('添加失败' + res.msg)
+          this.resetForm()
+        }
       } else {
         this.setState({
           submitLoading: false,

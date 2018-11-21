@@ -3,5 +3,7 @@
  */
 import baseUrl from '@api/baseUrl'; // 导入接口域名列表
 import api from '@utils/http' // 导入http中的请求函数
+import { GET, POST, PUT, UPDATE } from '@utils/http'
 
-export const getFinacialList = api(`${baseUrl.dev}/finacial`)
+export const getFinacialList = api(`${baseUrl.dev}/getAllFinacial`)
+export const addFinacialList = api(`${baseUrl.dev}/addFinacial`, POST)
