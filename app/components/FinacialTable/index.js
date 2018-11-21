@@ -180,6 +180,11 @@ class FinacialTable extends React.Component {
   async addFinacialList(finacialRow) {
     return await finacialApi.addFinacialList(finacialRow)
   }
+
+  async delFinacialList(id) {
+    return await finacialApi.delFinacialList({id})
+  }
+
   componentDidMount() {
     this.getFinacialList()
   }
@@ -192,17 +197,36 @@ class FinacialTable extends React.Component {
     });
   }
 
-  handleRemoveOk = () => {
-    this.setState(prevState => {
-      const removingKey = prevState.removingKey
-      return {
-        data: prevState.data.filter(record => {
-          return record.key !== removingKey
-        }),
-        removingKey: null,
-        removeVisible: false,
-      }
-    })
+  handleRemoveOk = async () => {
+    const id = this.state.removingKey
+    let res = await this.delFinacialList(id)
+    if (res.status === 0) {
+      message.success('删除成功')
+      this.getFinacialList()
+      this.setState(prevState => {
+        // const removingKey = prevState.removingKey
+        return {
+          // data: prevState.data.filter(record => {
+          //   return record.key !== removingKey
+          // }),
+          removingKey: null,
+          removeVisible: false,
+        }
+      })
+    } else if (res.status === 1) {
+      message.error('删除失败' + res.msg)
+      this.setState(prevState => {
+        // const removingKey = prevState.removingKey
+        return {
+          // data: prevState.data.filter(record => {
+          //   return record.key !== removingKey
+          // }),
+          removingKey: null,
+          removeVisible: false,
+        }
+      })
+    }
+     
   }
 
   handleRemoveCancel = () => {
@@ -223,9 +247,15 @@ class FinacialTable extends React.Component {
     return record.key === this.state.removingKey;
   }
 
-  remove(key) {
-    this.setState({ removingKey: key })
-  }
+  // async remove(key) {
+  //   let res = await delFinacialList(key)
+  //   if (res.status === 0) {
+  //     message.success('删除成功')
+  //     this.getFinacialList()
+  //   } else if (res.status === 1) {
+  //     message.error('删除失败' + res.msg)
+  //   }
+  // }
 
   edit(key) {
     this.setState({ editingKey: key });

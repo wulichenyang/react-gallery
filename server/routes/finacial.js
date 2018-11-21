@@ -1,6 +1,7 @@
 let express = require('express');
 let finacialRouter = express.Router();
 let Finacial = require('../models/finacial');
+let mongoose = require('mongoose');
 
 //  // insert
 //   let finacial = new Finacial({
@@ -48,6 +49,26 @@ finacialRouter.post('/addFinacial', (req, res, next) => {
       res.json({
         status: 0,
         msg: "Insert success",
+        data: doc
+      })
+    }
+  })
+})
+
+// 删除金融表单数据
+finacialRouter.post('/delFinacial', (req, res, next) => {
+  const id = req.body.id
+  console.log(id)
+  Finacial.deleteOne({ "_id": mongoose.Types.ObjectId(id) }, (err, doc) => {
+    if (err) {
+      res.json({
+        status: 1,
+        msg: err.message
+      })
+    } else {
+      res.json({
+        status: 0,
+        msg: "Delete success",
         data: doc
       })
     }

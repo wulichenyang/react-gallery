@@ -7,3 +7,4 @@ import { GET, POST, PUT, UPDATE } from '@utils/http'
 
 export const getFinacialList = api(`${baseUrl.dev}/getAllFinacial`)
 export const addFinacialList = api(`${baseUrl.dev}/addFinacial`, POST)
+export const delFinacialList = api(`${baseUrl.dev}/delFinacial`, POST)
