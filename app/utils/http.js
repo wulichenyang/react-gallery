@@ -45,6 +45,10 @@ const errorHandle = (status, other) => {
     case 404:
       message.error('请求的资源不存在');
       break;
+    // 500服务器内部错误
+    case 500:
+      message.error('服务器内部错误');
+      break;
     default:
       console.log(other);
   }

@@ -12,6 +12,7 @@ import {
 } from 'antd';
 import { Button } from '@components/Buttons';
 import { finacialApi } from '@api'
+import { localDate } from '@utils/date'
 import './index.less'
 
 // const data = [];
@@ -44,7 +45,15 @@ class EditableCell extends React.Component {
     } else {
       return <Input />;
     }
-  };
+  }
+
+  handleMoneyInput = (rule, value, callback) => {
+    if (value < 0) {
+      callback('Money must be more than 0！')
+    }
+    // Note: 必须总是返回一个 callback，否则 validateFieldsAndScroll 无法响应
+    callback()
+  }
 
   render() {
     const {
@@ -66,10 +75,16 @@ class EditableCell extends React.Component {
                 <FormItem style={{ margin: 0 }}>
                   {
                     getFieldDecorator(dataIndex, {
-                      rules: [{
+                      rules: dataIndex === 'money' ? [{
                         required: true,
                         message: `Please Input ${title}!`,
-                      }],
+                      }, {
+                        validator: this.handleMoneyInput
+                      }]
+                        : [{
+                          required: true,
+                          message: `Please Input ${title}!`,
+                        }],
                       initialValue: dataIndex === 'date' ?
                         moment(record[dataIndex], 'YYYY-MM-DD')
                         : record[dataIndex],
@@ -178,11 +193,13 @@ class FinacialTable extends React.Component {
   }
 
   async addFinacialList(finacialRow) {
-    return await finacialApi.addFinacialList(finacialRow)
+    return await finacialApi.addFinacialList({
+      finacialRow
+    })
   }
 
   async delFinacialList(id) {
-    return await finacialApi.delFinacialList({id})
+    return await finacialApi.delFinacialList({ id })
   }
 
   componentDidMount() {
@@ -226,7 +243,7 @@ class FinacialTable extends React.Component {
         }
       })
     }
-     
+
   }
 
   handleRemoveCancel = () => {
@@ -262,25 +279,39 @@ class FinacialTable extends React.Component {
   }
 
   save(form, key) {
-    form.validateFields((error, row) => {
+    form.validateFields(async (error, row) => {
       if (error) {
         return;
       }
-      const newData = [...this.state.data];
-      const index = newData.findIndex(item => key === item.key);
-      if (index > -1) {
-        const item = newData[index];
-        newData.splice(index, 1, {
-          ...item,
-          ...row,
-          // Rewrite date into YYYY-MM-DD
-          date: row.date.format('YYYY-MM-DD')
-        });
-        this.setState({ data: newData, editingKey: null });
-      } else {
-        newData.push(row);
-        this.setState({ data: newData, editingKey: null });
+      let res = await finacialApi.updateFinacialList({
+        id: key,
+        ...row,
+        date: localDate(row.date)
+      })
+      console.log('fuck' + new Date(row.date))
+      if (res.status === 0) {
+        message.success('更新成功')
+        this.setState({ editingKey: null });
+        this.getFinacialList()
+      } else if (res.status === 1) {
+        message.error('更新失败' + res.msg)
+        this.setState({ editingKey: null });
       }
+      // // const newData = [...this.state.data];
+      // // const index = newData.findIndex(item => key === item.key);
+      // // if (index > -1) {
+      // //   const item = newData[index];
+      //   newData.splice(index, 1, {
+      //     ...item,
+      //     ...row,
+      //     // Rewrite date into YYYY-MM-DD
+      //     date: row.date.format('YYYY-MM-DD')
+      //   });
+      //   this.setState({ data: newData, editingKey: null });
+      // } else {
+      //   newData.push(row);
+      //   this.setState({ data: newData, editingKey: null });
+      // }
     });
   }
 

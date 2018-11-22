@@ -2,7 +2,6 @@ let express = require('express');
 let finacialRouter = express.Router();
 let Finacial = require('../models/finacial');
 let mongoose = require('mongoose');
-
 //  // insert
 //   let finacial = new Finacial({
 //     activity: "shopping",
@@ -38,8 +37,9 @@ finacialRouter.get('/getAllFinacial', (req, res, next) => {
 
 // 添加金融表单数据
 finacialRouter.post('/addFinacial', (req, res, next) => {
-  const arr = [req.body]
-  Finacial.insertMany(arr, (err, doc) => {
+  const newItem = req.body.finacialRow
+  console.log(newItem)
+  Finacial.insertMany(newItem, (err, doc) => {
     if (err) {
       res.json({
         status: 1,
@@ -73,6 +73,36 @@ finacialRouter.post('/delFinacial', (req, res, next) => {
       })
     }
   })
+})
+
+// 修改金融表单数据
+finacialRouter.put('/updateFinacial', (req, res, next) => {
+  const id = req.body.id
+  const { activity, money, date } = req.body
+  console.log(date)
+  Finacial.updateOne(
+    { "_id": mongoose.Types.ObjectId(id) },
+    {
+      $set: {
+        activity,
+        money,
+        date
+      }
+    },
+    (err, doc) => {
+      if (err) {
+        res.json({
+          status: 1,
+          msg: err.message
+        })
+      } else {
+        res.json({
+          status: 0,
+          msg: "Update success",
+          data: doc
+        })
+      }
+    })
 })
 
 module.exports = finacialRouter;

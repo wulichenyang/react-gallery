@@ -14,6 +14,14 @@ class AddForm extends Component {
     this.props.onRef(this)
   }
 
+  handleMoneyInput = (rule, value, callback) => {
+    if (value < 0) {
+      callback('Money must be more than 0！')
+    }
+    // Note: 必须总是返回一个 callback，否则 validateFieldsAndScroll 无法响应
+    callback()
+  }
+
   render() {
     const FormItem = Form.Item
     const { getFieldDecorator } = this.props.form
@@ -53,6 +61,8 @@ class AddForm extends Component {
           type: 'number', message: 'The input is not valid number!',
         }, {
           required: true, message: 'Please input your money!',
+        }, {
+          validator: this.handleMoneyInput
         }],
       },
       date: {
