@@ -3,6 +3,7 @@ var path = require('path');
 var bodyParser = require('body-parser')
 var cookieParser = require('cookie-parser');
 var routers = require('./routes/index');
+var jwtauth = require('./middleware/jwtauth');
 var router = express.Router();
 // var finacial = require('./routes/finacial');
 var logger = require('morgan');
@@ -48,19 +49,17 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-// 拦截登录
-// TODO
-
-
-// routers
 // cross-access
 app.use(cors({
   origin: 'http://localhost:3838',
   credentials: true
 }))
-
+// 身份验证
+app.use(jwtauth);
+// routers
 app.use(routers.indexRouter);
 app.use(routers.finacialRouter);
+app.use(routers.userRouter);
 // Add api prefix
 Object.keys(routers).map(key => {
   app.use(apiPrefix, routers[key])

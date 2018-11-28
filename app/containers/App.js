@@ -7,12 +7,16 @@ import Home from '@pages/Home'
 import NotFound from '@pages/NotFound'
 import Dustbin from '@pages/Dustbin'
 import Finacial from '@pages/Finacial'
+import Signup from '@pages/Signup'
+import Signin from '@pages/Signin'
 
 class App extends Component {
 	render() {
 		return (
       <Router history={hashHistory}>
         <Redirect from="/" to="/home" />  
+        <Route  path="/signup" component={Signup}/>
+        <Route  path="/signin" component={Signin}/>
         <Route path="/" component={Index}>
           {/* <IndexRoute component={Home} /> */}
           <Route path="/home" component={Home}/>

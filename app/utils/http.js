@@ -6,6 +6,7 @@ import axios from 'axios';
 // import router from '../router';
 import { message } from 'antd';
 import { browserHistory } from 'react-router'
+import { hashHistory } from 'react-router';
 
 export const GET = 'GET';
 export const POST = 'POST';
@@ -17,7 +18,7 @@ export const PUT = 'PUT';
  * 携带当前页面路由，以期在登录页面完成登录后返回当前页面
  */
 const toLogin = () => {
-  browserHistory.push('/login')
+  hashHistory.push('/signin')
 }
 
 /** 
@@ -29,17 +30,13 @@ const errorHandle = (status, other) => {
   switch (status) {
     // 401: 未登录状态，跳转登录页
     case 401:
+      message.warning('未登录或登录超时，请重新登录');
       toLogin();
       break;
     // 403 token过期
     // 清除token并跳转登录页
     case 403:
-      message.warning('登录过期，请重新登录');
-      localStorage.removeItem('token');
-      // store.commit('loginSuccess', null);
-      setTimeout(() => {
-        toLogin();
-      }, 1000);
+      toLogin();
       break;
     // 404请求不存在
     case 404:
@@ -75,7 +72,7 @@ instance.interceptors.request.use(
     // 后台根据携带的token判断用户的登录情况，并返回给我们对应的状态码        
     // 而后我们可以在响应拦截器中，根据状态码进行一些统一的操作。        
     // const token = store.state.token;
-     (config.headers.Authorization = 'token');
+    //  (config.headers.Authorization = 'token');
     return config;
   },
   error => Promise.error(error))

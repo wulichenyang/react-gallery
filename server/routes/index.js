@@ -1,6 +1,7 @@
 let express = require('express')
 let indexRouter = express.Router();
 let finacialRouter = require('./finacial')
+let userRouter = require('./user')
 
 indexRouter.get('/', (req, res, next) => {
   res.send('index page')
@@ -8,5 +9,6 @@ indexRouter.get('/', (req, res, next) => {
 
 module.exports = {
   indexRouter,
-  finacialRouter
+  finacialRouter,
+  userRouter
 };
