@@ -7,6 +7,7 @@ import axios from 'axios';
 import { message } from 'antd';
 import { browserHistory } from 'react-router'
 import { hashHistory } from 'react-router';
+import cookie from '@utils/cookie';
 
 export const GET = 'GET';
 export const POST = 'POST';
@@ -25,17 +26,19 @@ const toLogin = () => {
  * 请求失败后的错误统一处理 
  * @param {Number} status 请求失败的状态码
  */
-const errorHandle = (status, other) => {
+const errorHandle = (status, msg) => {
   // 状态码判断
   switch (status) {
     // 401: 未登录状态，跳转登录页
     case 401:
-      message.warning('未登录或登录超时，请重新登录');
+      message.warning('未登录，请先登录');
       toLogin();
       break;
     // 403 token过期
     // 清除token并跳转登录页
     case 403:
+      message.warning('登录超时');
+      cookie.removeCookie('token')
       toLogin();
       break;
     // 404请求不存在
@@ -47,7 +50,7 @@ const errorHandle = (status, other) => {
       message.error('服务器内部错误');
       break;
     default:
-      console.log(other);
+      console.log(msg);
   }
 }
 
@@ -62,17 +65,12 @@ instance.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlenco
  */
 instance.interceptors.request.use(
   config => {
-    // TODO 
-    // TODO 
-    // TODO 
-    // TODO 
-
     // 登录流程控制中，根据本地是否存在token判断用户的登录情况        
     // 但是即使token存在，也有可能token是过期的，所以在每次的请求头中携带token        
     // 后台根据携带的token判断用户的登录情况，并返回给我们对应的状态码        
     // 而后我们可以在响应拦截器中，根据状态码进行一些统一的操作。        
-    // const token = store.state.token;
-    //  (config.headers.Authorization = 'token');
+    const token = cookie.getCookie('token');
+    token && (config.headers["Authorization"] = `Bearer ${token}`);
     return config;
   },
   error => Promise.error(error))

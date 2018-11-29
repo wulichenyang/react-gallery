@@ -8,6 +8,7 @@ class Signin extends Component {
       <div id="login">
         <div className="bg-hover"></div>
         <div className="login-wrapper"> 
+          <h1 className="login-header">Sign in</h1>
           <LoginForm />
         </div>
       </div>

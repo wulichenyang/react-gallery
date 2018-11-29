@@ -7,7 +7,8 @@ class Signup extends Component {
     return (
       <div id="register">
         <div className="bg-hover"></div>
-        <div className="login-wrapper">
+        <div className="register-wrapper">
+          <h1 className="register-header">Sign up</h1>
           <RegisterForm />
         </div>
       </div>
