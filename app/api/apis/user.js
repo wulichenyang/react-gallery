@@ -7,3 +7,4 @@ import { GET, POST, PUT, UPDATE } from '@utils/http'
 
 export const signup = api(`${baseUrl.dev}/signup`, POST)
 export const signin = api(`${baseUrl.dev}/signin`, POST)
+export const captcha = api(`${baseUrl.dev}/captcha`)

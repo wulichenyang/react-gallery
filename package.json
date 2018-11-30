@@ -76,6 +76,7 @@
     "moment": "~2.20.1",
     "mongoose": "^5.3.12",
     "morgan": "^1.9.1",
+    "pbkdf2": "^3.0.17",
     "rc-queue-anim": "^1.4.1",
     "rc-tween-one": "~1.7.3",
     "react": "^16.0.0",

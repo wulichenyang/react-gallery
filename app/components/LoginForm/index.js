@@ -4,6 +4,8 @@ import './index.less'
 import { Link, hashHistory } from 'react-router';
 import { userApi } from '@api';
 import cookie from '@utils/cookie';
+import { salt } from '@configs'
+import pbkdf2 from 'pbkdf2'
 
 const FormItem = Form.Item;
 
@@ -12,9 +14,10 @@ class NormalLoginForm extends React.Component {
     e.preventDefault();
     this.props.form.validateFields(async (err, values) => {
       if (!err) {
+        let encoded = pbkdf2.pbkdf2Sync(values.password, salt, 5000, 32, 'sha512').toString('hex')
         let res = await userApi.signin({
           username: values.username.trim(),
-          password: values.password,
+          password: encoded,
         })
         if (res.status === 1) { // fail
           message.error(res.msg)
@@ -39,11 +42,21 @@ class NormalLoginForm extends React.Component {
             <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Username" />
             )}
         </FormItem>
-        <FormItem style={{ marginBottom: '0' }}>
+        <FormItem>
           {getFieldDecorator('password', {
             rules: [{ required: true, message: 'Please input your Password!' }],
           })(
             <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Password" />
+            )}
+        </FormItem>
+        <FormItem style={{ marginBottom: '0' }}>
+          {getFieldDecorator('captcha', {
+            rules: [{ required: true, message: 'Please input captcha!' }],
+          })(
+            <div className="captcha-wrapper">
+              <Input placeholder="Captcha" />
+              <img src="d" alt="captcha"/>
+            </div>
             )}
         </FormItem>
         <FormItem style={{ marginBottom: '0', textAlign: 'right' }}>

@@ -4,6 +4,8 @@ import './index.less'
 import { userApi } from '@api'
 import { hashHistory } from 'react-router';
 import { Link } from 'react-router'
+import pbkdf2 from 'pbkdf2'
+import { salt } from '@configs'
 
 const FormItem = Form.Item;
 
@@ -33,10 +35,10 @@ class NormalRegisterForm extends React.Component {
     })
     this.props.form.validateFields(async (err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
+        let encoded = pbkdf2.pbkdf2Sync(values.password, salt, 5000, 32, 'sha512').toString('hex')
         let res = await userApi.signup({
           username: values.username,
-          password: values.password
+          password: encoded,
         })
         // fail
         if(res.status === 1) {

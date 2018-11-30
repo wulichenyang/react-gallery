@@ -13,17 +13,17 @@ import Signin from '@pages/Signin'
 import cookie from '@utils/cookie'
 
 class App extends Component {
-  // 登录验证 路由改变时刷新cookie中的token过期时间 0.1小时
+  // 登录验证 路由改变时刷新cookie中的token过期时间 0.2小时
   requireAuth = (nextState, replace) => {
     let token = cookie.getCookie('token')
     if (!token) { // 未登录
-      message.error('登录超时')
+      message.info('请登录')
       replace({
         pathname: '/signin',
         // state: { nextPathname: nextState.location.pathname }
       });
     } else { // 刷新token在cookie里的时间
-      cookie.setCookie('token', token, .1)
+      cookie.setCookie('token', token, .2)
     }
   }
 
