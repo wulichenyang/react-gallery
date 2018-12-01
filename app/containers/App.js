@@ -23,7 +23,7 @@ class App extends Component {
         // state: { nextPathname: nextState.location.pathname }
       });
     } else { // 刷新token在cookie里的时间
-      cookie.setCookie('token', token, .2)
+      cookie.setCookie('token', token, 0.2)
     }
   }
 

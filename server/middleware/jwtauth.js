@@ -2,7 +2,10 @@ let jwt = require('jsonwebtoken')
 // 自定义 验证用户token 中间件
 module.exports = (req, res, next) => {
   // 定义 不用token 的api
-  if (req.originalUrl.indexOf('/signin') >= 0 || req.originalUrl.indexOf('/signup') >= 0) {
+  if (req.originalUrl.indexOf('/signin') >= 0 
+      || req.originalUrl.indexOf('/signup') >= 0
+      || req.originalUrl.indexOf('/captcha') >= 0
+     ) {
     return next();
   }
   //定义 用token的api对其验证

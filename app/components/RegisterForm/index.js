@@ -6,21 +6,61 @@ import { hashHistory } from 'react-router';
 import { Link } from 'react-router'
 import pbkdf2 from 'pbkdf2'
 import { salt } from '@configs'
+import { captcha } from './../../api/apis/user';
 
 const FormItem = Form.Item;
 
 class NormalRegisterForm extends React.Component {
   constructor(props) {
     super(props);
+    this.captchaRef = React.createRef();
     this.state = {
+      captchaSvg: null,
       submitLoading: false,
-    };
+    }
   }
+  componentDidMount() {
+    this.refreshCaptcha()
+  }
+
+  // // 组件更新props
+  // componentWillReceiveProps(value) {
+  //   this.setState({
+  //     captchaSvg:  ? value.goods_desc : '',
+  //   });
+  // }
+  // 更新完毕
+  componentDidUpdate() {
+    this.captchaRef.current.innerHTML = this.state.captchaSvg;
+  }
+
+  refreshCaptcha = async () => {
+    let res = await userApi.captcha()
+    if (res.status === 0) {
+      this.setState({
+        captchaSvg: res.data.img
+      })
+    }
+    this.props.form.resetFields(['captcha'])
+  }
+
+  handleCaptchaClick = async (e) => {
+    e.preventDefault()
+    await this.refreshCaptcha()
+  }
+
+  loadingButton = () => {
+    this.setState({
+      submitLoading: true
+    })
+  }
+
   resetButton = () => {
     this.setState({
       submitLoading: false,
     })
   }
+
   resetForm = () => {
     this.props.form.resetFields([
       'username',
@@ -28,26 +68,28 @@ class NormalRegisterForm extends React.Component {
       'confirm'
     ])
   }
+
   handleSignup = async (e) => {
-    e.preventDefault();
-    this.setState({
-      submitLoading: true
-    })
+    e.preventDefault()
+    this.loadingButton()
     this.props.form.validateFields(async (err, values) => {
       if (!err) {
         let encoded = pbkdf2.pbkdf2Sync(values.password, salt, 5000, 32, 'sha512').toString('hex')
         let res = await userApi.signup({
           username: values.username,
           password: encoded,
+          captcha: values.captcha.trim().toLowerCase(),
         })
         // fail
-        if(res.status === 1) {
+        if (res.status === 1) {
           message.error(res.msg)
           this.resetButton()
-        } else if(res.status === 0) { // success
+          await this.refreshCaptcha()
+        } else if (res.status === 0) { // success
           message.success(res.msg)
           this.resetForm()
           this.resetButton()
+          await this.refreshCaptcha()
           hashHistory.push('/signin')
         }
       } else {
@@ -82,6 +124,21 @@ class NormalRegisterForm extends React.Component {
             )}
         </FormItem>
         <FormItem>
+          <div className="captcha-wrapper">
+            {getFieldDecorator('captcha', {
+              rules: [{ required: true, message: 'Please input captcha!' }],
+            })(
+              <Input placeholder="Captcha" />
+              )}
+            <div
+              className="captcha-svg-wrapper"
+              ref={this.captchaRef}
+              onClick={this.handleCaptchaClick}
+            >
+            </div>
+          </div>
+        </FormItem>
+        <FormItem>
           <Button
             type="primary"
             htmlType="submit"
@@ -90,8 +147,8 @@ class NormalRegisterForm extends React.Component {
           >
             Sign up
           </Button>
-            Or <Link to="/signin">
-              Sign in
+          Or <Link to="/signin">
+            Sign in
             </Link>
         </FormItem>
       </Form>

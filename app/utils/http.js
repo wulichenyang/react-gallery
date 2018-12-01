@@ -55,7 +55,9 @@ const errorHandle = (status, msg) => {
 }
 
 // 创建axios实例
-let instance = axios.create({ timeout: 1000 * 12 });
+let instance = axios.create({ timeout: 1000 * 12 })
+// 设置CORS头部携带cookie
+instance.defaults.withCredentials = true
 // 设置post请求头
 instance.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 

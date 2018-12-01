@@ -16,9 +16,10 @@ function getCookie(key) {
 }
 
 function setCookie(name, val, hour) {
-  let day = hour / 24;
+  // 毫秒ms
+  let expHour = hour * 60 * 60 * 1000;
   let expireDate = new Date();
-  expireDate.setDate(expireDate.getDate() + day);
+  expireDate.setTime(expireDate.getTime() + expHour);
   document.cookie = `${name}=${encodeURI(val)}; expires=${expireDate.toGMTString()}`;
 }
 

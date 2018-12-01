@@ -9,14 +9,18 @@ var router = express.Router();
 var logger = require('morgan');
 var app = express()
 var mongoose = require('mongoose');
-const { apiPrefix } = require('./config')
+const { 
+  user,
+  pwd,
+  database,
+  apiPrefix,
+  sessionConf,
+  corsConf,
+} = require('./config')
 const cors = require('cors')
+const session = require('express-session');
 
-//链接MongoDB数据库
-const user = 'test'
-const pwd = 'test'
-const database = 'gallery'
-
+// 连接本地mongodb数据库
 mongoose.connect(`mongodb://${user}:${pwd}@127.0.0.1:27017/${database}`);
 
 // 连接成功操作
@@ -44,22 +48,19 @@ app.set('view engine', 'html');
 // // create application/x-www-form-urlencoded parser
 // var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
-
+app.use(logger('dev'))
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(cookieParser())
+app.use(session(sessionConf))
 // cross-access
-app.use(cors({
-  origin: 'http://localhost:3838',
-  credentials: true
-}))
+app.use(cors(corsConf))
 // 身份验证
-app.use(jwtauth);
+app.use(jwtauth)
 // routers
-app.use(routers.indexRouter);
-app.use(routers.finacialRouter);
-app.use(routers.userRouter);
+app.use(routers.indexRouter)
+app.use(routers.finacialRouter)
+app.use(routers.userRouter)
 // Add api prefix
 Object.keys(routers).map(key => {
   app.use(apiPrefix, routers[key])
