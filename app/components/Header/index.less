@@ -27,7 +27,7 @@
         }
       }
     }
-    ul.nav {
+    nav {
       display: flex;
       width: 100%;
       flex-direction: row;
@@ -48,6 +48,28 @@
         &>a:hover {
           color: @nav-font-hover;
         }
+      }
+    }
+    .user-info {
+      font-size: 13px;
+      display: flex; 
+      margin-right: 30px;
+      .user-name {
+        color: #ddd;
+      }
+      a, span {
+        display: flex;
+        margin: 0 5px;
+        justify-content: center;
+        align-items: center;
+        white-space: nowrap;
+      }
+
+      a {
+        color: #ddd
+      }
+      a:hover {
+        color: #fff;
       }
     }
   }

@@ -25,8 +25,11 @@ const webpackConfigBase = {
     extensions: ['.js', '.json'],
     alias: {
       '@app': path.join(__dirname, '../app'),
+      // redux路径引用有点问题 暂时相对路径
+      '@redux': path.join(__dirname, '../app/redux'),
       '@actions': path.join(__dirname, '../app/redux/actions'),
       '@reducers': path.join(__dirname, '../app/redux/reducers'),
+      '@selectors': path.join(__dirname, '../app/redux/selectors'),
       '@api': path.join(__dirname, '../app/api'),
       '@components': path.join(__dirname, '../app/components'),
       '@containers': path.join(__dirname, '../app/containers'),

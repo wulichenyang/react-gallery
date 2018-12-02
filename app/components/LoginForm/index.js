@@ -6,6 +6,9 @@ import { userApi } from '@api';
 import cookie from '@utils/cookie';
 import { salt } from '@configs'
 import pbkdf2 from 'pbkdf2'
+import { connect } from 'react-redux'
+// import { bindActionCreators } from 'redux'
+// import { setUserInfo } from '@actions/user'
 
 const FormItem = Form.Item;
 
@@ -23,10 +26,11 @@ class NormalLoginForm extends React.Component {
   }
 
   // // 组件更新props
-  // componentWillReceiveProps(value) {
-  //   this.setState({
-  //     captchaSvg:  ? value.goods_desc : '',
-  //   });
+  // componentWillReceiveProps(nextProps) {
+  //   // this.setState({
+  //   //   captchaSvg:  ? nextProps.goods_desc : '',
+  //   // });
+  //   console.log(nextProps)
   // }
   // 更新完毕
   componentDidUpdate() {
@@ -69,9 +73,10 @@ class NormalLoginForm extends React.Component {
     this.loadingButton()
     this.props.form.validateFields(async (err, values) => {
       if (!err) {
+        let username = values.username.trim()
         let encoded = pbkdf2.pbkdf2Sync(values.password, salt, 5000, 32, 'sha512').toString('hex')
         let res = await userApi.signin({
-          username: values.username.trim(),
+          username,
           password: encoded,
           captcha: values.captcha.trim().toLowerCase(),
         })
@@ -82,6 +87,7 @@ class NormalLoginForm extends React.Component {
         } else if (res.status === 0) { // success
           message.success(res.msg)
           cookie.setCookie('token', res.data.token, 0.2)
+          cookie.setCookie('username', username)
           this.resetForm()
           this.resetButton()
           await this.refreshCaptcha()
@@ -148,3 +154,17 @@ class NormalLoginForm extends React.Component {
 const LoginForm = Form.create()(NormalLoginForm);
 
 export default LoginForm
+// const mapDispatchToProps = (dispatch, ownProps) => {
+//   return {
+//   //   // dispatching plain actions
+//   ...bindActionCreators({ setUserInfo }, dispatch)
+//   }
+//   // return {
+//   //   setUserInfo : (username) => dispatch(setUserInfo(username)),
+//   // }
+// }
+
+// export default connect(
+//   null,
+//   mapDispatchToProps
+// )(LoginForm)

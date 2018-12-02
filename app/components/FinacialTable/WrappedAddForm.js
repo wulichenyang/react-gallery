@@ -2,7 +2,6 @@
 import React, {Component} from 'react'
 
 import { Form, DatePicker, TimePicker, Button, Input, InputNumber } from 'antd';
-import { AddTodo } from '@containers/Todo/AddTodo';
 
 class AddForm extends Component {
   constructor(props) {

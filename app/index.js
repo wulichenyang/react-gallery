@@ -5,14 +5,11 @@ import { Icon, Button, Input, Form, Checkbox } from 'antd'
 import VanillaTilt from 'vanilla-tilt'
 import App from '@containers/App'
 import { Provider } from 'react-redux'
-import { createStore } from 'redux'
-import rootReducer from '@reducers'
+import store from './redux/store'
 import axios from 'axios'
 import '@styles/reset.css'
 import '@styles/theme.less'
 import '@styles/main.less'
-
-const store = createStore(rootReducer);
 
 const rootElement = document.getElementById('root')
 

@@ -16,6 +16,7 @@ class App extends Component {
   // 登录验证 路由改变时刷新cookie中的token过期时间 0.2小时
   requireAuth = (nextState, replace) => {
     let token = cookie.getCookie('token')
+    let username = cookie.getCookie('username')
     if (!token) { // 未登录
       message.info('请登录')
       replace({
@@ -24,6 +25,7 @@ class App extends Component {
       });
     } else { // 刷新token在cookie里的时间
       cookie.setCookie('token', token, 0.2)
+      cookie.setCookie('username', username, 0.2)
     }
   }
 

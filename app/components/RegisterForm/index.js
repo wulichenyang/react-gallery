@@ -7,6 +7,7 @@ import { Link } from 'react-router'
 import pbkdf2 from 'pbkdf2'
 import { salt } from '@configs'
 import { captcha } from './../../api/apis/user';
+import cookie from '@utils/cookie';
 
 const FormItem = Form.Item;
 
@@ -87,6 +88,8 @@ class NormalRegisterForm extends React.Component {
           await this.refreshCaptcha()
         } else if (res.status === 0) { // success
           message.success(res.msg)
+          cookie.removeCookie('token')
+          cookie.removeCookie('username')
           this.resetForm()
           this.resetButton()
           await this.refreshCaptcha()
