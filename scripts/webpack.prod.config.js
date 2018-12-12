@@ -15,7 +15,7 @@ function resolve(relatedPath) {
 }
 
 const webpackConfigProd = {
-  devtool: 'cheap-module-source-map',
+  devtool: false,
   module: {
     rules: [
       {
@@ -48,7 +48,10 @@ const webpackConfigProd = {
     // 根据入口文件，提取重复引用的公共代码类库，打包到单独文件中
     new webpack.optimize.OccurrenceOrderPlugin (),
     // 压缩优化代码开始
-    new webpack.optimize.UglifyJsPlugin({ minimize: true }),
+    new webpack.optimize.UglifyJsPlugin({ 
+      minimize: true,
+      comments: false //去掉注释
+    }),
     // 分析代码
     new BundleAnalyzerPlugin({ analyzerPort: 3011 }),
     new Copy([

@@ -11,8 +11,9 @@ const devPort = 3838
 function resolve(relatedPath) {
   return path.join(__dirname, relatedPath)
 }
+
 const webpackConfigDev = {
-  devtool: 'inline-source-map',
+  devtool: 'source-map',
   entry: {
     main: [
       'babel-polyfill',
@@ -42,6 +43,7 @@ const webpackConfigDev = {
       'process.env.NODE_ENV': JSON.stringify('development'),
       IS_DEVELOPMETN: true,
     }),
+
     // 防止与热加载冲突[name]
     new ExtractTextPlugin('style.[name].css'),
     new OpenBrowserPlugin({

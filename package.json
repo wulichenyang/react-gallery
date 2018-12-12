@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "webpack-dev-server --config ./scripts/webpack.dev.config.js --color --progress --hot",
     "test": "webpack --config ./scripts/webpack.test.config.js",
-    "build": "webpack --config ./scripts/webpack.prod.config.js",
+    "build": "webpack --config ./scripts/webpack.prod.config.js -p",
     "lint": "eslint ./ --cache --fix --ignore-pattern .gitignore",
     "mock": "supervisor -w mock ./app/mocks/http.js",
     "server": "nodemon server/bin/www"
@@ -60,6 +60,7 @@
     "url-loader": "~0.6.2",
     "vanilla-tilt": "^1.4.1",
     "webpack-bundle-analyzer": "^2.13.1",
+    "webpack-bundle-size-analyzer": "^3.0.0",
     "webpack-dev-server": "~2.11.0",
     "webpack-merge": "^4.1.1"
   },

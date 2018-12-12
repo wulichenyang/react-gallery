@@ -88,7 +88,7 @@ const webpackConfigBase = {
     }),
     // vendor hash名字保持不变
     new webpack.HashedModuleIdsPlugin(),
-    // 包含了 node_modules 里的公共js包统一打包到common里
+    // 包含了 node_modules 里的公共js包统一打包到vendor里
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor', // 入口文件名
       filename: 'vendor.[chunkhash:4].js', // 打包后的文件名
